@@ -25,6 +25,14 @@ class AppLoadingTests(TestCase):
         self.assertIsInstance(models, (list, GeneratorType))
         self.assertListEqual(models, [MockModel])
 
+    def test_get_model(self):
+        from test_haystack.core.models import MockModel
+
+        self.assertEqual(app_loading.get_model('core', 'mockmodel'), MockModel)
+        self.assertEqual(app_loading.get_model('core', 'MockModel'), MockModel)
+        self.assertRaises(LookupError, app_loading.get_model,
+                          app_label='core', model_name='submodule')
+
 
 class AppWithoutModelsTests(TestCase):
     # Confirm that everything works if an app is enabled
